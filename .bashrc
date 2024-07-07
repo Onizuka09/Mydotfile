@@ -1,3 +1,4 @@
+#
 # Enable the subsequent settings only in interactive sessions
 case $- in
   *i*) ;;
@@ -5,7 +6,7 @@ case $- in
 esac
 
 # Path to your oh-my-bash installation.
-export OSH='/home/moktar/.oh-my-bash'
+export OSH='/home/moktar/.config/.oh-my-bash'
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-bash is loaded.
@@ -134,6 +135,17 @@ source "$OSH"/oh-my-bash.sh
 # alias ohmybash="mate ~/.oh-my-bash"
 
 #export a PATH 
-export PATH="$PATH:/home/moktar/balena-cli/"
+#export PATH="$PATH:/home/moktar/balena-cli/"
+export PATH="$PATH:/usr/local/bin/ccls"
+# alias 
+alias vim=nvim 
+alias vi=nvim
+alias ohmybashconfig="nvim ~/.oh-my-bash"
+alias bashconfig="nvim ~/.bashrc"
+alias i3config="nvim ~/.config/i3/config"
+alias nvimconfig="nvim ~/.config/nvim/init.vim"
+alias shortcuts="mdcat ~/how_to/terminalshortcuts.md"
+## ROS settup 
+
 
 
