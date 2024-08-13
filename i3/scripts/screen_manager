@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# Run xrandr and capture its output
+xrandr_output=$(xrandr)
+
+# Use grep to filter for lines with " connected " (with spaces around "connected")
+connected_displays=$(echo "$xrandr_output" | grep " connected ")
+
+# Print the connected display ports
+echo "Connected Display Ports:"
+echo "$connected_displays" | awk '{print $1}'
+
+displays_name=$(echo "$connected_displays" | awk '{print $1}')
+echo $displays_name
+echo "************" 
+mapfile -t displays_name <<< "$displays_name"
+ for d in "${displays_name[@]}"
+ do 
+ #echo "$d" 
+ if [ "$d" != "eDP-1" ]; then 
+ 	echo "new screen detected ${d}"
+ 	screen=${d} 
+	break
+ else   
+	echo "no screen detected ${d}"
+fi 
+ echo
+ 
+ done  
+ echo $new_screen
+ Desktop_screen="eDP-1"
+
+choice=$(echo -e "Share screen Left
+Share screen Right
+Duplicate screen
+Stop sharing" | rofi -dmenu -p "Choose an option:")
+
+# Process the user's choice
+case "$choice" in
+    "Share screen Left") 
+      echo "You chose Option 1."
+      xrandr --output $screen  --auto --left-of $Desktop_screen   ;;
+
+     "Share screen Right") 
+      echo "You chose Option 1."
+      xrandr --output $screen  --auto --right-of $Desktop_screen   ;;
+ 
+    "Duplicate screen")
+    echo "You chose Option 2."
+    xrandr --output $screen --auto --same-as $Desktop_screen 
+    # xrandr --output $screen --auto --output $Desktop_screen --auto --mode 1920x1080 --right-of $screen
+     ;;
+    "Stop sharing")
+     echo "You chose Option 3."
+ 	xrandr --output $screen --off 
+     ;;
+    
+    *) echo "Invalid choice.";;
+esac
+
+ 
+ #eDP-1
+
