@@ -1,4 +1,5 @@
 # MyDotfile
+![image](./doc/home_scr.png)
 #### Requirement to install before 
 ```bash 
 sudo apt update && sudo apt install git curl build-essential make
@@ -6,7 +7,7 @@ sudo apt update && sudo apt install git curl build-essential make
 
 # ***[Neovim setup](Neovim-setup.md)*** 
 
-![nvim](nvim_setup.png)
+![nvim](doc/neovim.png)
 
 A terminal Text editor 
 ## Features:  
