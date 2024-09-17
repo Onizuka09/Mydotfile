@@ -58,7 +58,12 @@ floating_modifier $mod
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec kitty -e tmux
+bindsym $mod+Shift+Return exec kitty -e tmux 
+bindsym $mod+Return exec kitty
+# launches discord 
+
+
+
 # kill focused window
 bindsym $mod+Shift+A kill
 
@@ -79,8 +84,8 @@ exec_always --no-startup-id picom --config /home/moktar/.config/picom/picom.conf
 # change focus
 bindsym $mod+j focus down
 bindsym $mod+k focus up
-bindsym $mod+l focus left 
-bindsym $mod+h focus right
+bindsym $mod+l focus right 
+bindsym $mod+h focus left
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -244,8 +249,8 @@ bar {
 
 
 # Sreen brightness controls: sudo apt install light 
-bindsym XF86MonBrightnessUp exec  /home/moktar/myScripts/brightness/brightness -I # increase screen brightness
-bindsym XF86MonBrightnessDown exec  /home/moktar/myScripts/brightness/brightness -D  # decrease screen brightness
+bindsym XF86MonBrightnessUp exec  /home/moktar/.config/i3/scripts/brightness_control.sh -I # increase screen brightness
+bindsym XF86MonBrightnessDown exec  /home/moktar/.config/i3/scripts/brightness_control.sh -D  # decrease screen brightness
 
 # Touchpad controls
 #bindsym XF86TouchpadToggle 
@@ -279,7 +284,7 @@ bindsym $mod+Shift+b exec brave-browser
 bindsym $mod+Shift+i exec firefox
 # launch file 
 
-bindsym $mod+Shift+f exec nautilus
+bindsym $mod+Shift+f exec flameshot gui
 bindsym $mod+Shift+m exec kitty -e ranger /home/moktar
 
 # launch vim 
@@ -290,7 +295,8 @@ bindsym $mod+Shift+v exec kitty -e nvim
 
 #bindsym $mod+Shift+s exec gnome-screenshot --interactive
 exec_always --no-startup-id i3-msg 'workspace $ws9; exec /snap/bin/obsidian'
-
+# launch discord 
+# exec_always --no-startup-id i3-msg 'workspace $ws6; exec discord'
 # keybinding for stopping and playing a youtube video 
 # for this you need to install : sudo apt-get install xdotool youtube-dl 
 bindsym $mod+b exec "xdotool search --onlyvisible --class brave windowactivate --sync key 'space'"
