@@ -1,28 +1,22 @@
 {
   "languageserver": {
-    "ccls": {
-      "command": "ccls",
-      "args": ["--log-file=/tmp/ccls.log", "-v=1"],
-      "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"],
-      "rootPatterns": ["compile_commands.json", ".ccls"],
-	  "index": {
-         "initialBlacklist": [".*"],
-         "threads": 1,
-         "whitelist": [".*"]
-      },
-      "initializationOptions": {
-        "cache": {
-          "directory": ".ccls-cache"
-        },
-		"highlight": {"lsRanges": true},
-        "client": {
-          "snippetSupport": true }
-      }
-       },
+ 
     "clangd": {
-      "path": "~/.config/coc/extensions/coc-clangd-data/install/18.1.3/clangd_18.1.3/bin/clangd",
-	  "clangd.semanticHighlighting": true,
-    "coc.preferences.semanticTokensHighlights": false
+    "path": "/usr/bin/",
+    "command":"clangd-15" ,
+	   "args": ["--background-index","--background-index","--header-insertion-decorators=0","--completion-style=detailed"],
+      "rootPatterns": [
+        "compile_flags.txt",
+        "compile_commands.json",
+        ".vim/",
+        ".git/",
+        ".hg/"
+      ],
+      "filetypes": ["c", "cpp", "objc", "objcpp"],
+  "diagnostic.displayByAle": true,
+   "clangd.semanticHighlighting": true,
+    "coc.preferences.semanticTokensHighlights":true, 
+
     },
 	"arduino":{ 
     "command":"/usr/bin/arduino-language-server",

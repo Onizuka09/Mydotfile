@@ -1,5 +1,6 @@
 let mapleader=" "
 filetype plugin indent off
+:set nospell
 :set clipboard+=unnamedplus
 :set relativenumber
 :set bg=dark
@@ -13,7 +14,9 @@ filetype plugin indent off
 :set mouse=a	
 :set showmatch " Shows matching brackets
 :set ruler " Always shows location in file (line#)
-set guicursor=n-v-c-i:block
+" :set guicursor=n-v-c-i:block
+:set guicursor=i:ver25-iCursor
+
 function! TabIndent()
     let col = col('.')
     if col == 1
@@ -28,7 +31,23 @@ function! TabIndent()
 endfunction
 
 call plug#begin()
-Plug 'dhruvasagar/vim-table-mode'
+"auto-pairs complets opening (,[, ",{ ..   
+
+Plug 'jiangmiao/auto-pairs'
+
+Plug 'kamykn/popup-menu.nvim'
+"plugin for gn build systems ( generates NINJA files )
+Plug 'https://github.com/kalcutter/vim-gn'
+" 
+"Plug 'neovim/nvim-lspconfig' " Language Server Protocol Config
+Plug 'dense-analysis/ale'
+Plug 'ayu-theme/ayu-vim' " ayu color schem 
+Plug 'kamykn/spelunker.vim' " for spell checking 
+Plug 'voldikss/vim-floaterm' " floating terminal 
+Plug 'vim-scripts/c.vim'    "pluging for C   
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " Syntax and code analysis
+Plug 'p00f/nvim-ts-rainbow'
+Plug 'dhruvasagar/vim-table-mode'  " table mode using CTRL-D 
 Plug 'http://github.com/tpope/vim-surround' " Surrounding ysw)
 Plug 'https://github.com/preservim/nerdtree' " NerdTree
 Plug 'https://github.com/tpope/vim-commentary' " For Commenting gcc & gc
@@ -55,26 +74,96 @@ Plug 'morhetz/gruvbox'
 Plug 'm-pilia/vim-ccls'
 " highlighting 
 Plug 'jackguo380/vim-lsp-cxx-highlight'
+" plugin for neovim 
+Plug 'normen/vim-pio'
+" for make 
+Plug 'tpope/vim-dispatch'
+" vim tmux nav 
+Plug'christoomey/vim-tmux-navigator'
 call plug#end()					
 
+" consfis for vim auto-apirs
+let g:AutoPairsFlyMode = 0
+let g:AutoPairsShortcutBackInsert = '<M-b>'
+" set up template for cpp 
+function! PromptForTemplate()
+    let choice = input("Use template for new C++ file? (y/n): ")
+    return (tolower(choice) == 'y')
+endfunction
+
+autocmd BufNewFile *.cpp if PromptForTemplate() | 0r ~/.config/nvim/templates/skeleton.cpp | endif
+
+
+"Float term setu 
+nnoremap <C-t> :FloatermToggle<CR>
+" augroup FloatermMapping
+     autocmd!
+     autocmd FileType floaterm nnoremap <buffer> <Esc> <C-\><C-n>:FloatermToggle<CR>
+     autocmd FileType floaterm inoremap <buffer> <Esc> <C-\><C-n>:FloatermToggle<CR>
+ augroup end
+tnoremap <Esc> <C-\><C-n>:FloatermToggle<CR>
+let g:floaterm_wintype='split'
+let g:floaterm_height=0.3
+ " nnoremap <leader><t> :FloatermNew
+" setup tree-sitter 
+" Plugin: nvim-treesitter/nvim-treesitter {{{
+if has_key(plugs, 'nvim-treesitter')
+	lua << EOF
+		-- Treesitter configuration
+		require('nvim-treesitter.configs').setup {
+			-- If TS highlights are not enabled at all, or disabled via `disable` prop,
+			-- highlighting will fallback to default Vim syntax highlighting
+			highlight = {
+				enable = true, -- false will disable the whole extension
+				extended_mode = true,
+			use_languagetree = true,
+			disable = {}, -- list of language that will be disabled
+				-- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean
+				-- Required for spellcheck, some LaTex highlights and
+				-- code block highlights that do not have ts grammar
+				additional_vim_regex_highlighting = {'org'},
+			},
+			rainbow = {
+				enable = true,
+				extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+				max_file_lines = nil, -- Do not enable for files with more than n lines, int
+				colors = {}, -- table of hex strings
+				termcolors = {} -- table of colour name strings
+			},
+			ensure_installed = {'org', 'c'},
+		}
+EOF
+endif
+
+" ------------- 
+"  set up template for c 
+"
+"
+"  ------------
 "keyboard setings for terminal mode 
 :tnoremap <Esc> <C-\><C-n>
 
 "Setup Gruvbox 
 
-colorscheme gruvbox
-let g:gruvbox_contrast_dark = 'hard'
-set background=dark
+"colorscheme gruvbox
+"let g:gruvbox_contrast_dark = 'hard'
+" set background=dark
+" ayu theme
+set termguicolors     " enable true colors support
+"let ayucolor="light"  " for light version of theme
+" let ayucolor="mirage" " for mirage version of theme
+let ayucolor="dark"   " for dark version of theme
+colorscheme ayu
 
 "----- keybindings for formatting ---- 
 nnoremap <silent> <leader>f :Format<CR>
 nnoremap <silent> <leader>F :FormatWrite<CR>
 
 " setup for Nterdfont Tagbar 
-nnoremap <C-f> :NERDTreeFocus<CR>
+"nnoremap <C-f> :NERDTreeFocus<CR>
 set encoding=UTF-8
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
+"nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-n> :NERDTreeToggle<CR>
 nmap <F8> :TagbarToggle<CR>
 
 " keybindings for vim 
@@ -90,8 +179,8 @@ nnoremap <C-x> :<esc>$i<right>
 " map CTRL-A to beginning-of-line (insert mode)
 nnoremap <C-a> :<esc>0i
 " map CTRLto normal mode 
-nnoremap <A-w> :i<CR>
-nnoremap <C-s> :w<CR>
+"nnoremap <A-w> :i<CR>
+"nnoremap <C-s> :w<CR>
 nnoremap <C-q> :q<CR>
 "-------------------
 :set completeopt-=preview " For No Previews
@@ -189,8 +278,8 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 
 " Formatting selected code
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+xmap <leader>f  <Plug>(coc-format-selected)<CR>
+nmap <leader>f  <Plug>(coc-format-selected)<CR>
 
 augroup mygroup
   autocmd!
@@ -338,4 +427,155 @@ let g:mkdp_markdown_css=fnameescape($HOME).'/.local/lib/github-markdown-css/gith
 
 "----------------- ccls conf " ------ 
 
+" primeagen configs must have 
+nnoremap <leader><CR> :so ~/.config/nvim/init.vim<CR>
+" sets up whehere to to use Files or Git files command in FZF
+function! GFilesFallback()
+  let output = system('git rev-parse --show-toplevel') " Is there a faster way?
+  let prefix = get(g:, 'fzf_command_prefix', '')
+  if v:shell_error == 0
+    exec "normal :" . prefix . "GFiles\<CR>"
+  else
+    exec "normal :" . prefix . "Files\<CR>"
+  endif
+  return 0
+endfunction
 
+nnoremap <C-p> :call GFilesFallback()<CR>
+nnoremap <C-k> :cnext<CR>
+nnoremap <C-j> :cprev<CR>
+nnoremap <C-E> :copen<CR>
+
+
+" spell checker 
+
+let g:enable_spelunker_vim = 1
+
+" Enable spelunker.vim on readonly files or buffer. (default: 0)
+" 1: enable
+" 0: disable
+let g:enable_spelunker_vim_on_readonly = 0
+
+" Check spelling for words longer than set characters. (default: 4)
+let g:spelunker_target_min_char_len = 4
+
+" Max amount of word suggestions. (default: 15)
+let g:spelunker_max_suggest_words = 15
+
+" Max amount of highlighted words in buffer. (default: 100)
+let g:spelunker_max_hi_words_each_buf = 100
+
+" Spellcheck type: (default: 1)
+" 1: File is checked for spelling mistakes when opening and saving. This
+" may take a bit of time on large files.
+" 2: Spellcheck displayed words in buffer. Fast and dynamic. The waiting time
+" depends on the setting of CursorHold `set updatetime=1000`.
+let g:spelunker_check_type = 1
+
+" Highlight type: (default: 1)
+" 1: Highlight all types (SpellBad, SpellCap, SpellRare, SpellLocal).
+" 2: Highlight only SpellBad.
+" FYI: https://vim-jp.org/vimdoc-en/spell.html#spell-quickstart
+let g:spelunker_highlight_type = 1
+
+" Option to disable word checking.
+" Disable URI checking. (default: 0)
+let g:spelunker_disable_uri_checking = 1
+
+" Disable email-like words checking. (default: 0)
+let g:spelunker_disable_email_checking = 1
+
+" Disable account name checking, e.g. @foobar, foobar@. (default: 0)
+" NOTE: Spell checking is also disabled for JAVA annotations.
+let g:spelunker_disable_account_name_checking = 1
+
+" Disable acronym checking. (default: 0)
+let g:spelunker_disable_acronym_checking = 1
+
+" Disable checking words in backtick/backquote. (default: 0)
+let g:spelunker_disable_backquoted_checking = 1
+
+" Disable default autogroup. (default: 0)
+let g:spelunker_disable_auto_group = 1
+
+" Create own custom autogroup to enable spelunker.vim for specific filetypes.
+augroup spelunker
+  autocmd!
+  " Setting for g:spelunker_check_type = 1:
+  autocmd BufWinEnter,BufWritePost *.js,*.jsx,*.json,*.md call spelunker#check()
+
+  " Setting for g:spelunker_check_type = 2:
+  autocmd CursorHold *.js,*.jsx,*.json,*.md call spelunker#check_displayed_words()
+augroup END
+
+" Override highlight group name of incorrectly spelled words. (default:
+" 'SpelunkerSpellBad')
+let g:spelunker_spell_bad_group = 'SpelunkerSpellBad'
+
+" Override highlight group name of complex or compound words. (default:
+" 'SpelunkerComplexOrCompoundWord')
+let g:spelunker_complex_or_compound_word_group = 'SpelunkerComplexOrCompoundWord'
+
+" Override highlight setting.
+highlight SpelunkerSpellBad cterm=underline ctermfg=247 gui=underline guifg=#9e9e9e
+highlight SpelunkerComplexOrCompoundWord cterm=underline ctermfg=NONE gui=underline guifg=NONE
+
+
+" Enable spelunker.vim on readonly files or buffer. (default: 0)
+" 1: enable
+" 0: disable
+"
+"
+"// lsp configuratiuon 
+" Ignore git commit when linting (highly annoying)
+let g:ale_pattern_options = {
+    \       'COMMIT_EDITMSG$': {'ale_linters': [], 'ale_fixers': []}
+    \   }
+let g:ale_linters = {
+    \   'yaml': ['yamllint'],
+    \   'cpp': ['clangtidy'],
+    \   'c': ['clangtidy'],
+    \   'asciidoc': ['cspell'],
+    \   'markdown': ['cspell']
+    \   }
+let g:ale_fixers = {
+    \   'cpp': ['clang-format'],
+    \   'c': ['clang-format']}
+ 
+" Automatic fixing
+autocmd FileType c nnoremap <leader>f <Plug>(ale_fix)
+ 
+" General settings
+let g:ale_linters_explicit = 1
+let g:ale_completion_enabled = 1
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_set_balloons=1
+let g:ale_hover_to_floating_preview=1
+let g:ale_use_global_executables = 1
+let g:ale_sign_column_always = 1
+let g:ale_disable_lsp = 1
+ 
+" C++ linting
+let g:ale_cpp_clangtidy_options = '-checks=-*,cppcoreguidelines-*'
+let g:ale_cpp_clangtidy_checks = ['readability-*,performance-*,bugprone-*,misc-*']
+let g:ale_cpp_clangtidy_checks += ['clang-analyzer-cplusplus-doc-comments']
+ 
+" C linting
+let g:ale_c_clangtidy_options = '-checks=-*,cppcoreguidelines-*'
+let g:ale_c_clangtidy_checks = ['readability-*,performance-*,bugprone-*,misc-*']
+let g:ale_c_clangtidy_checks += ['-readability-function-cognitive-complexity']
+let g:ale_c_clangtidy_checks += ['-readability-identifier-length']
+let g:ale_c_clangtidy_checks += ['-misc-redundant-expression']
+let g:ale_c_build_dir_names = ['build', 'release', 'debug']
+ 
+" This function searches for the first clang-tidy config in parent directories and sets it
+function! SetClangTidyConfig()
+    let l:config_file = findfile('.clang-tidy', expand('%:p:h').';')
+    if !empty(l:config_file)
+        let g:ale_c_clangtidy_options = '--config=' . l:config_file
+        let g:ale_cpp_clangtidy_options = '--config=' . l:config_file
+    endif
+endfunction
+ 
+" Run this for c and c++ files
+autocmd BufRead,BufNewFile *.c,*.cpp,*.h,*.hpp call SetClangTidyConfig()
