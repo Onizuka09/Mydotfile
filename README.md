@@ -69,6 +69,18 @@ cp -r kitty .config/
 
 >**Note**
 >Fee free to change the configurations as suits you
+# Tmux 
+```bash
+cp -r tmux/.* ~/  
+```
+- install plugins 
+```bash 
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+git clone https://github.com/tmux-plugins/tmux-sensible ~/.tmux/plugins/tmux-sensible
+
+git clone https://github.com/christoomey/vim-tmux-navigator ~/.tmux/plugins/vim-tmux-navigator
+```
 
 # Ranger 
 [Ranger](https://github.com/ranger/ranger) is a terminal file manager. 
