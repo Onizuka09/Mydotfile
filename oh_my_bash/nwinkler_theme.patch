@@ -1,8 +1,8 @@
 diff --git a/themes/nwinkler/nwinkler.theme.sh b/themes/nwinkler/nwinkler.theme.sh
-index 3d5b9c7..b78e7b3 100644
+index 3d5b9c7..62e3e18 100644
 --- a/themes/nwinkler/nwinkler.theme.sh
 +++ b/themes/nwinkler/nwinkler.theme.sh
-@@ -28,11 +28,17 @@ function _omb_theme_PROMPT_COMMAND {
+@@ -28,11 +28,18 @@ function _omb_theme_PROMPT_COMMAND {
    if [[ $exit_status -eq 0 ]]; then PROMPT_END=$PROMPT_END_CLEAN
      else PROMPT_END=$PROMPT_END_DIRTY
    fi
@@ -10,14 +10,15 @@ index 3d5b9c7..b78e7b3 100644
 +  if [[ -n "${VIRTUAL_ENV}" ]]; then
 +    venv="(${_omb_prompt_brown}$(basename "${VIRTUAL_ENV}")${_omb_prompt_reset_color})"
 +  else
-+    venv="(ven)"
++    venv=""
 +  fi
    # Save history
    #history -a
    #history -c
    #history -r
 -  PS1="($(clock_prompt)) $(scm_char) [${_omb_prompt_navy}\u${_omb_prompt_reset_color}@${_omb_prompt_green}\H${_omb_prompt_reset_color}] ${_omb_prompt_olive}\w${_omb_prompt_reset_color}$(scm_prompt_info) ${_omb_prompt_reset_color}\n$(prompt_end) "
-+  PS1="($(clock_prompt)) $(scm_char) ${venv} $(scm_char) [${_omb_prompt_navy}\u${_omb_prompt_reset_color}@${_omb_prompt_green}\H${_omb_prompt_reset_color}] ${_omb_prompt_olive}\w${_omb_prompt_reset_color}$(scm_prompt_info) ${_omb_prompt_reset_color}\n$(prompt_end) "
++  PS1="${venv}[${_omb_prompt_navy}\u${_omb_prompt_reset_color}@${_omb_prompt_green}\H${_omb_prompt_reset_color}] ${_omb_prompt_olive}\w${_omb_prompt_reset_color}$(scm_prompt_info) ${_omb_prompt_reset_color}\n$(prompt_end) "
++
    PS2='> '
    PS4='+ '
  }
